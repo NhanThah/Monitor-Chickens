@@ -22,10 +22,19 @@ while True:
 cap.release()
 cv2.destroyAllWindows()
 import cv2
-from ultralytics import YOLO
+import torch
+import pathlib
+import subprocess
+import os
 
-# Khởi tạo model YOLO
-model = YOLO("best.pt")
+# Load YOLOv5 model
+# Adjusting pathlib for compatibility
+temp = pathlib.PosixPath
+pathlib.PosixPath = pathlib.WindowsPath
+
+# Load your YOLOv5 model
+model_path = 'D:\\FPT\\FALL2024\\yolov5\\best.pt'
+model = torch.hub.load('D:\\FPT\\FALL2024\\yolov5', 'custom', path=model_path, source='local')
 
 # Đọc video từ file M3U8
 cap = cv2.VideoCapture("D:\\FPT\\FALL2024\\m3u8\\output.m3u8")
@@ -57,16 +66,16 @@ while True:
     if not ret:
         print("Không thể đọc frame hoặc video đã hết.")
         break
-    
+
     # Chạy mô hình phát hiện đối tượng trên frame
     results = model(frame)
-    
+
     # Vẽ bounding box lên frame
-    annotated_frame = results[0].plot()
-    
+    annotated_frame = results.render()[0]
+
     # Ghi lại frame đã qua phát hiện vào file video
     output_video.write(annotated_frame)
-    
+
     # Hiển thị frame đã phát hiện đối tượng (có thể tắt nếu không cần)
     cv2.imshow('Detected Frame', annotated_frame)
 
