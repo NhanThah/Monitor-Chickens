@@ -25,7 +25,7 @@ import cv2
 from ultralytics import YOLO
 
 # Khởi tạo model YOLO
-model = YOLO("yolov8n.pt")
+model = YOLO("best.pt")
 
 # Đọc video từ file M3U8
 cap = cv2.VideoCapture("D:\\FPT\\FALL2024\\m3u8\\output.m3u8")
